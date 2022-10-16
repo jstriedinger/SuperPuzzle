@@ -101,11 +101,14 @@ public class PlayerMechanics : MonoBehaviour
     private void dropObject()
     {
         if(itemOnHand )
-        rigidbodyOnHand.useGravity = true;
-        rigidbodyOnHand.drag = 1;
-        rigidbodyOnHand.constraints = RigidbodyConstraints.None;
+        {
+            rigidbodyOnHand.useGravity = true;
+            rigidbodyOnHand.drag = 1;
+            rigidbodyOnHand.constraints = RigidbodyConstraints.None;
 
-        rigidbodyOnHand.transform.parent = null;
-        itemOnHand = null;
+            rigidbodyOnHand.transform.parent = null;
+            itemOnHand = null;
+
+        }
     }
 }
