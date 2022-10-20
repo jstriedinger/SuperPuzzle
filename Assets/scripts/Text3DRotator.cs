@@ -13,7 +13,7 @@ public class Text3DRotator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Quaternion targetRotation = Quaternion.LookRotation(PlayerScript.instance.transform.position - transform.position);
+        Quaternion targetRotation = Quaternion.LookRotation(new Vector3(PlayerScript.instance.transform.position.x - transform.position.x, transform.position.y, PlayerScript.instance.transform.position.z - transform.position.z));// PlayerScript.instance.transform.position.z - transform.position.z));
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 2);
 
     }

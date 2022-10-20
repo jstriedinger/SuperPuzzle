@@ -2,21 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ColorTypes // your custom enumeration
-{
-    Red,
-    Blue,
-    Yellow,
-    Purple,
-    Green,
-    Orange
-
-};
 public class Item : MonoBehaviour
 {
     [SerializeField] public int number;
     [SerializeField] public Color color;
-    [SerializeField] public ColorTypes colorType;
 
 
     private Material myMaterial;

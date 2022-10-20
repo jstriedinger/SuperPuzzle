@@ -8,19 +8,17 @@ public class GoalSection : MonoBehaviour
 {
     [SerializeField] int goalVal = 1;
     [SerializeField] Color goalColor;
-    [SerializeField] private TextMeshProUGUI currentNumTxt;
-    [SerializeField] private TextMeshProUGUI goalTxt;
-
+    [SerializeField] private TextMeshProUGUI goaUI;
 
     private List<Item> currentItems = new List<Item>();
     private int currentNum = 0;
+    private bool solved = false;
+    private bool closed = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        currentNumTxt.text = "0";
-        goalTxt.text = goalVal.ToString();
-        goalTxt.color = goalColor;
+        goaUI.text = "0 / "+ goalVal.ToString();
 
     }
 
@@ -30,16 +28,16 @@ public class GoalSection : MonoBehaviour
         
     }
 
-    private void OnCollisionExit(Collision collision)
+    public bool GetSolved()
     {
-        
+        return solved;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.gameObject.tag == "item")
+        if (collision.gameObject.tag == "item" && !closed)
         {
-            Item itemToAdd = other.gameObject.GetComponent<Item>();
+            Item itemToAdd = collision.gameObject.GetComponent<Item>();
             if (itemToAdd != null)
             {
                 if (!currentItems.Contains(itemToAdd))
@@ -47,11 +45,11 @@ public class GoalSection : MonoBehaviour
                     currentItems.Add(itemToAdd);
                     //sum
                     currentNum += itemToAdd.number;
-                    currentNumTxt.text = currentNum.ToString();
+                    goaUI.text = currentNum.ToString()+" / "+goalVal;
                     
                   
                     Color mostRepeatedColor = currentItems.GroupBy(x => x.color).OrderByDescending(x => x.Count()).First().ToList().First().color;
-                    currentNumTxt.color = mostRepeatedColor;
+                    goaUI.color = mostRepeatedColor;
 
                     CheckWin();
                 }
@@ -59,11 +57,11 @@ public class GoalSection : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnCollisionExit(Collision collision)
     {
-        if (other.gameObject.tag == "item")
+        if (collision.gameObject.tag == "item" && !closed)
         {
-            Item itemToRemove = other.gameObject.GetComponent<Item>();
+            Item itemToRemove = collision.gameObject.GetComponent<Item>();
             if (itemToRemove != null)
             {
                 if (currentItems.Contains(itemToRemove))
@@ -71,16 +69,16 @@ public class GoalSection : MonoBehaviour
                     currentItems.Remove(itemToRemove);
                     //sum
                     currentNum -= itemToRemove.number;
-                    currentNumTxt.text = currentNum.ToString();
+                    goaUI.text = currentNum.ToString()+" / "+goalVal;
 
                     if(currentItems.Count() > 0 )
                     {
                         Color mostRepeatedColor = currentItems.GroupBy(x => x.color).OrderByDescending(x => x.Count()).First().ToList().First().color;
-                        currentNumTxt.color = mostRepeatedColor;
+                        goaUI.color = mostRepeatedColor;
                     }
                     else
                     {
-                        currentNumTxt.color = Color.black;
+                        goaUI.color = Color.black;
                     }
                 }
             }
@@ -89,8 +87,21 @@ public class GoalSection : MonoBehaviour
 
     private void CheckWin()
     {
-        if (goalVal == currentNum && goalColor == currentNumTxt.color)
+        if (goalVal == currentNum && goalColor == goaUI.color)
+        {
+            solved = true;
+            goaUI.text = goalVal+"/"+ goalVal;
             Debug.Log("Yoo won!");
+        } else
+        {
+            solved = false;
+            goaUI.text = currentNum.ToString() + " / " + goalVal;
+        }
+    }
+
+    public void Close()
+    {
+        closed = true;
     }
 
 

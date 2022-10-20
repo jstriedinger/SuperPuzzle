@@ -24,6 +24,7 @@ public class PlayerMechanics : MonoBehaviour
     void Start()
     {
         cam = Camera.main;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     // Update is called once per frame
@@ -33,13 +34,14 @@ public class PlayerMechanics : MonoBehaviour
         RaycastHit hit;
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         bool gotHit = Physics.Raycast(ray, out hit, pickupRange, LayerMask.GetMask("item"));
-        if(gotHit)
+        if (gotHit)
         {
             if (itemOnHand == null)
             {
                 //change cursor
                 
                 Cursor.SetCursor(cursorHand, Vector2.zero, CursorMode.Auto);
+                Debug.Log("Curso hand");
                 if (Input.GetMouseButtonDown(0))
                 {
                     grabObject(hit.transform.gameObject);
